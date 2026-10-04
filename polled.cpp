@@ -9,7 +9,7 @@ int wait_not_bust(volatile uint32_t *status, uint32_t timeout){
 		}
 		timeout--;
 	}
-	if((*status & ST_BUST) == 0){
+	if((*status & ST_BUSY) == 0){
 		return 0;
 	}
 	return -1;
