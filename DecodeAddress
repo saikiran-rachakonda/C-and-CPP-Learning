@@ -1,0 +1,30 @@
+typedef struct {
+    uint32_t base, size;
+    int id;
+} Region;
+
+int decode(const Region *map, size_t n, uint32_t addr, uint32_t *offset){
+    for(size_t i=0;i<n;i++){
+        if(addr>=map[i].base && addr<=map[i].base+map[i].size){
+            *offset = addr-map[i].base;
+            return map[i].id;
+        }
+    }
+    return -1;
+}
+
+bool regions_overlap(const Region *map, size_t n){
+    for (size_t i = 0; i < n; i++) {
+        if (map[i].size == 0)
+            continue;
+        uint64_t a_end = (uint64_t)map[i].base + map[i].size;
+        for (size_t j = i + 1; j < n; j++) {
+            if (map[j].size == 0)
+                continue;
+            uint64_t b_end = (uint64_t)map[j].base + map[j].size;
+            if (map[i].base < b_end && map[j].base < a_end)
+                return true;
+        }
+    }
+    return false;
+}
